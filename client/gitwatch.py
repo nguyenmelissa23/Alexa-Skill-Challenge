@@ -37,7 +37,7 @@ def git_pull():
 def git_commit():
 
   os.chdir(DIR)
-  os.popen("git commit -m " + MESSAGE)
+  os.popen("git commit -m \"" + MESSAGE + "\"")
 
 
 '''[git_push]------------------------------------------------------------------

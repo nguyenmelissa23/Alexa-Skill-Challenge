@@ -3,8 +3,17 @@
         {
             "intent": "GitPull",
             "slots": [
-                //arguments
             ]
         }
+        // , {
+        //     "intent": "GitPush",
+        //     "slots": [
+        //     ]
+        // }
+        // ,{
+        //     "intent": "GitWatch",
+        //     "slots": [
+        //     ]
+        // }
     ]
 }

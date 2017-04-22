@@ -16,3 +16,10 @@ class RepoLoader:
 
     def get_all(self):
         return self.repositories
+
+    def add_path(self, path):
+        repo_name = str(path.split('\\')[-1]).rstrip()
+        self.repositories[repo_name] = str(path).rstrip()
+        with open(self.filename, 'a') as repo_file:
+            repo_file.write(path)
+            repo_file.close()

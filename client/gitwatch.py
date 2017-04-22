@@ -8,7 +8,8 @@
                  they are invoked.
 ---*-----------------------------------------------------------------------*'''
 
-#import statements
+#import subprocess
+import os
 
 '''----------------------------------------------------------------------------
 Config variables
@@ -22,14 +23,19 @@ Config variables
 ----------------------------------------------------------------------------'''
 def git_pull():
 
+  os.chdir("C://Projects//Alexa-Skill-Challenge")
+  os.popen("git pull origin master")
 
+  #proc = subprocess.Popen('cmd.exe', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+  #stdout, stderr = proc.communicate("git pull origin master\n")
+  #print(stdout)
 
 
 
 '''[git_commit]----------------------------------------------------------------
 
 ----------------------------------------------------------------------------'''
-def git_commit():
+#def git_commit():
 
 
 
@@ -37,8 +43,9 @@ def git_commit():
 '''[git_push]------------------------------------------------------------------
 
 ----------------------------------------------------------------------------'''
-def git_push():
+#def git_push():
 
 
 
 
+git_pull()

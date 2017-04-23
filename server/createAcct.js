@@ -1,5 +1,5 @@
 //to run, cd to the right folder, type in "npm install"
-//next type in "node creatAcct.js"
+//next type in "node createAcct.js"
 const inquirer = require('inquirer');
 
 function userAcct(){

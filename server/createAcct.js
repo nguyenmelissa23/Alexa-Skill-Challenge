@@ -1,3 +1,5 @@
+//to run, cd to the right folder, type in "npm install"
+//next type in "node creatAcct.js"
 const inquirer = require('inquirer');
 
 function userAcct(){

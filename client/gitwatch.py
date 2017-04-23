@@ -10,13 +10,14 @@
 
 import argparse
 import os
-import repoloader
+#import repoloader
+import time
 
 '''----------------------------------------------------------------------------
 Config variables
 ----------------------------------------------------------------------------'''
 DIR = "C://Projects//Alexa-Skill-Challenge"
-MESSAGE = "set up arguments for gitwatch.py"
+MESSAGE = "added line endings so commands properly terminate, also added push"
 
 
 '''[git_pull]------------------------------------------------------------------
@@ -25,10 +26,8 @@ MESSAGE = "set up arguments for gitwatch.py"
 def git_pull():
 
   os.chdir(DIR)
-  os.popen("git pull origin master")
-
-
-
+  os.popen("git pull origin master\n")
+  time.sleep(2)
 
 '''[git_commit]----------------------------------------------------------------
 
@@ -36,13 +35,17 @@ def git_pull():
 def git_commit():
 
   os.chdir(DIR)
-  os.popen("git commit -m \"" + MESSAGE + "\"")
-
+  os.popen("git commit -m \"" + MESSAGE + "\"\n")
+  time.sleep(2)
 
 '''[git_push]------------------------------------------------------------------
 
 ----------------------------------------------------------------------------'''
-#def git_push():
+def git_push():
+
+  os.chdir(DIR)
+  os.popen("git push origin master\n")
+  time.sleep(2)
 
 parser = argparse.ArgumentParser(description = 'Convert commands into git commands')
 parser.add_argument('-d', nargs=1, help='directory of repo')

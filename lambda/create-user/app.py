@@ -28,13 +28,10 @@ def handler(event, context):
 
     with conn.cursor() as cur:
         #cur.execute("create table Employee3 ( EmpID  int NOT NULL, Name varchar(255) NOT NULL, PRIMARY KEY (EmpID))") 
-        cur.execute("CREATE TABLE `client_account`( "
-	                   " `id` INT(11) auto_increment NOT NULL,"
-	                   " `username` VARCHAR(256) NOT NULL,"
-                       " `pwd_key` VARCHAR(256) NOT NULL," 
-                       " `token` VARCHAR(512) NOT NULL,"
-                       " PRIMARY KEY (`id`)); )" )
+        cur.execute('INSERT into `client_account`( `username`, `pwd_key`)'
+                       ' VALUES ( \"Xpression\", \"password\"')
         conn.commit()
         conn.end()
         conn.done(null, "All Done")
-        return "Created table"
+        return "Inserted user"
+        

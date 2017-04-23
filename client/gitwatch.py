@@ -47,8 +47,8 @@ def git_commit():
 parser = argparse.ArgumentParser(description = 'Convert commands into git commands')
 parser.add_argument('-d', nargs=1, help='directory of repo')
 parser.add_argument('--pull', help='pull from repo', action='store_true')
-parser.add_argument('--push', help='pull from repo', action='store_true')
-parser.add_argument('-c', '--commit', help='pull from repo', action='store_true')
+parser.add_argument('--push', help='push to repo', action='store_true')
+parser.add_argument('-c', '--commit', help='commit to repo', action='store_true')
 
 args = parser.parse_args()
 

@@ -2,6 +2,8 @@
 //next type in "node createAcct.js"
 const inquirer = require('inquirer');
 
+userAcct();
+
 function userAcct(){
     inquirer.prompt([{
         type: 'input',

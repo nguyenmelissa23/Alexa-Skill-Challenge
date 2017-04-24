@@ -41,7 +41,6 @@ def git_push():
 
   os.chdir(DIR)
   os.system("git push origin master\n")
-  time.sleep(5)
 
 '''[git_add]-------------------------------------------------------------------
 
@@ -55,7 +54,29 @@ def git_add(file_list):
     cmd += file + ' '
 
   os.system(cmd)
-  time.sleep(5)
+
+'''[git_cmd]-------------------------------------------------------------------
+
+----------------------------------------------------------------------------'''
+def git_cmd(cmd, args=None):
+  cmd_str = "git " + cmd + " "
+
+  if cmd == 'add':
+    for file in args:
+      cmd_str += file + " "
+  elif cmd == 'commit':
+    cmd_str += "-m \"" + args + "\""
+  elif cmd == 'pull':
+    cmd_str += "origin master"
+  elif cmd == 'push':
+    cmd_str += "origin master"
+    
+  # keep going elif cmd == 
+
+  cmd_str += "\n"
+  print(cmd_str)
+  os.chdir(DIR)
+  os.system(cmd_str)
 
 parser = argparse.ArgumentParser(description = 'Convert commands into git commands')
 parser.add_argument('-d', nargs=1, help='directory of repo')
@@ -67,6 +88,17 @@ parser.add_argument('-a', '--add', nargs='+', help='add files to stage')
 args = parser.parse_args()
 
 if args.pull:
+  git_cmd("pull")
+elif args.push:
+  git_cmd("push")
+elif args.commit:
+  git_cmd("commit", args.commit[0])
+elif args.add:
+  git_cmd("add", args.add)
+
+#could try to implement as switch? but would not be ordered properly
+'''
+if args.pull:
   git_pull()
 
 if args.push:
@@ -77,3 +109,4 @@ if args.commit:
 
 if args.add:
   git_add(args.add)
+'''

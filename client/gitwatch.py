@@ -18,58 +18,37 @@ Config variables
 ----------------------------------------------------------------------------'''
 DIR = "C://Projects//Alexa-Skill-Challenge"
 
-'''[git_pull]------------------------------------------------------------------
-
-----------------------------------------------------------------------------'''
-def git_pull():
-
-  os.chdir(DIR)
-  os.system("git pull origin master\n")
-
-'''[git_commit]----------------------------------------------------------------
-
-----------------------------------------------------------------------------'''
-def git_commit(message):
-
-  os.chdir(DIR)
-  os.system("git commit -m \"" + message + "\"\n")
-
-'''[git_push]------------------------------------------------------------------
-
-----------------------------------------------------------------------------'''
-def git_push():
-
-  os.chdir(DIR)
-  os.system("git push origin master\n")
-
-'''[git_add]-------------------------------------------------------------------
-
-----------------------------------------------------------------------------'''
-def git_add(file_list):
-
-  os.chdir(DIR)
-  cmd = "git add "
-
-  for file in file_list:
-    cmd += file + ' '
-
-  os.system(cmd)
-
 '''[git_cmd]-------------------------------------------------------------------
 
 ----------------------------------------------------------------------------'''
 def git_cmd(cmd, args=None):
   cmd_str = "git " + cmd + " "
-
+  
+  '''
+  supported cmds:
+  add
+  branch
+  commit
+  pull
+  push
+  status
+  '''
   if cmd == 'add':
     for file in args:
       cmd_str += file + " "
+
   elif cmd == 'commit':
     cmd_str += "-m \"" + args + "\""
+
   elif cmd == 'pull':
     cmd_str += "origin master"
+
   elif cmd == 'push':
     cmd_str += "origin master"
+
+  elif cmd == 'branch':
+    cmd_str += args
+
     
   # keep going elif cmd == 
 
@@ -84,7 +63,8 @@ parser.add_argument('--pull', help='pull from repo', action='store_true')
 parser.add_argument('--push', help='push to repo', action='store_true')
 parser.add_argument('-c', '--commit', nargs=1, help='commit to repo')
 parser.add_argument('-a', '--add', nargs='+', help='add files to stage')
-
+parser.add_argument('-b', '--branch', nargs=1, help='switch branch')
+parser.add_argument('-s', '--status', help='get status of repo', action='store_true')
 args = parser.parse_args()
 
 if args.pull:
@@ -95,7 +75,10 @@ elif args.commit:
   git_cmd("commit", args.commit[0])
 elif args.add:
   git_cmd("add", args.add)
-
+elif args.branch:
+  git_cmd("branch", args.branch[0])
+elif args.status:
+  git_cmd("status")
 #could try to implement as switch? but would not be ordered properly
 '''
 if args.pull:

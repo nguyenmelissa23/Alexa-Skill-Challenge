@@ -1,19 +1,64 @@
 {
-    "intents": [
+    "intents":[
         {
-            "intent": "GitPull",
-            "slots": [
+            "name": "AMAZON.CancelIntent",
+            "samples": []
+        },
+        {
+            "name": "AMAZON.HelpIntent",
+            "samples": [
+                "how do I search"
+            ]
+        },
+        {
+            "name": "AMAZON.NoIntent",
+            "samples": []
+        },
+        {
+            "name": "AMAZON.RepeatIntent",
+            "samples": [
+                "repeat that",
+                "say that again",
+                "can you say that again",
+                "please repeat"
+            ]
+        },
+        {
+            "name": "AMAZON.StartOverIntent",
+            "samples": [
+                "startover",
+                "new search",
+                "search again"
+            ]
+        },
+        {
+            "name": "AMAZON.StopIntent",
+            "samples": []
+        },
+        {
+            "name": "AMAZON.YesIntent",
+            "samples": []
+        },{
+            "name": "GitCommandIntent",
+            "samples":[
+                "git {command}",
+                "git {command} {repo}" 
+            ], 
+            "slots":[
+                {
+                    "name": "command",
+                    "type": "LIST_OF_COMMAND", 
+                    "samples":[
+                        "pull",
+                        "push", 
+                        "watch" 
+                    ]
+                },{
+                    "name": "repo", 
+                    "type": "LIST_OF_REPO", 
+                    "samples": []
+                } 
             ]
         }
-        // , {
-        //     "intent": "GitPush",
-        //     "slots": [
-        //     ]
-        // }
-        // ,{
-        //     "intent": "GitWatch",
-        //     "slots": [
-        //     ]
-        // }
     ]
 }

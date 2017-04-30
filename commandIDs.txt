@@ -1,0 +1,3 @@
+Pull - 1
+Commit - 2
+Push - 3

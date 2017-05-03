@@ -19,24 +19,25 @@ def handler(event, context):
 
     user_name = event['username']
     user_password = event['password']
-    hashed_password = pbkdf2_sha256.hash(user_password)
-    
+    device_alias = event['alias']
+
     result = 0
 
     success = False
 
-    #pbkdf2_sha256.verify(password, hash)
     with conn.cursor() as cursor:
-        cursor.execute("SELECT COUNT(*) FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))    
+        cursor.execute("SELECT * FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))    
         result = cursor.fetchall()
-        if result[0][0] == 1:
-            sucess = True
-            cursor.execute("INSERT INTO `client_account`(`username`, `pwd_key`)" +
-                               " VALUES(\"{0}\", \"{1}\");".format(user_name, hashed_password))
-        else:
-            success = False
+        if len(result == 1):
+            success = pbkdf2_sha256.verify(password, result[0]["pwd_key"])
+            if success:
+                user_id = result[0]['id']
+                token = str(user_id) + random.choices(string.ascii_letters + string.digits, k = 501)
+                cursor.execute("INSERT INTO `client_devices`(`user_id`, `device_token`, `alias`)" +
+                               " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(user_id, token, device_alias))
+                return token
     
         conn.commit()
         conn.close()
-        return(success)
+        return("")
         

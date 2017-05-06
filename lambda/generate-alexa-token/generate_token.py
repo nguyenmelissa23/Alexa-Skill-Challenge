@@ -37,12 +37,12 @@ def handler(event, context):
             if success:
                 user_id = result[0][constants.ID_INDEX]
                 token = str(user_id) + "".join(random.choices(string.ascii_letters + string.digits, k = 501))
-                cursor.execute("UPDATE `client_device`" +
-                               " SET `alexa_token` = \"{0}\" WHERE `id` = {1}".format(token, user_id))
+                cursor.execute("UPDATE `client_account`" +
+                               " SET `token` = \"{0}\" WHERE `id` = {1};".format(token, user_id))
     
         conn.commit()
         conn.close()
         return ({
-            'token' = token
+            'token': token
         })
         

@@ -5,7 +5,6 @@ import pymysql
 import constants
 import random
 import string
-from passlib.hash import pbkdf2_sha256
 
 #rds settings
 rds_host  = rds_config.db_host
@@ -28,15 +27,20 @@ def handler(event, context):
     repositories = {}
 
     with conn.cursor() as cursor:
-        cursor.execute("SELECT `client_device`.`alias`, `user_repository`.`alias` FROM `client_account` WHERE `alexa_token` = \"{0}\"".format(alexa_token) +
-                       " INNER JOIN `client_device` ON `client_device`.`user_id` = `client_account`.`id`" +
-                       " INNER JOIN `client_repository` ON `user_repository`.`device_id` = `client_device`.`id`);"
+        cursor.execute("SELECT * FROM `client_account` WHERE `token` = \"{0}\";".format(alexa_token))
         result = cursor.fetchall()
-        for repo in result:
-            if repositories.contains(repo[DEVICE_ALIAS_INDEX]):
-                repositories[repo[DEVICE_ALIAS_INDEX]].append(repo[REPO_ALIAS_INDEX])
-            else:
-                repositories[repo[DEVICE_ALIAS_INDEX]] = [ repo[REPO_ALIAS_INDEX] ]
+        if len(result) == 1:
+            user_id = result[0][constants.ID_INDEX]
+            cursor.execute("SELECT `client_device`.`alias`, `user_repository`.`alias` FROM `client_account` " +
+                " INNER JOIN `client_device` ON `client_device`.`user_id` = `client_account`.`id`" +
+                " INNER JOIN `user_repository` ON `user_repository`.`device_id` = `client_device`.`id`" +
+                " WHERE `client_device`.`user_id` = \"{0}\";".format(user_id))
+            result = cursor.fetchall()
+            for repo in result:
+                if repo[constants.DEVICE_ALIAS_INDEX] in repositories:
+                    repositories[repo[constants.DEVICE_ALIAS_INDEX]].append(repo[constants.REPO_ALIAS_INDEX])
+                else:
+                    repositories[repo[constants.DEVICE_ALIAS_INDEX]] = [ repo[constants.REPO_ALIAS_INDEX] ]
     
         conn.commit()
         conn.close()

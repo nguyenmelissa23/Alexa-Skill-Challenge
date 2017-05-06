@@ -5,7 +5,6 @@ import pymysql
 import constants
 import random
 import string
-from passlib.hash import pbkdf2_sha256
 
 #rds settings
 rds_host  = rds_config.db_host
@@ -30,11 +29,11 @@ def handler(event, context):
     success = False
 
     with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM `client_device` WHERE `token` = \"{0}\";".format(alexa_token))
+        cursor.execute("SELECT * FROM `client_device` WHERE `device_token` = \"{0}\";".format(device_token))
         result = cursor.fetchall()
         if len(result) == 1:
             device_id = result[0][constants.ID_INDEX]
-            cursor.execute("INSERT INTO `client_device`(`device_id`, `alias`, `path`)" +
+            cursor.execute("INSERT INTO `user_repository`(`device_id`, `alias`, `path`)" +
                            " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(device_id, repo_alias, repo_path))
             success = True
 

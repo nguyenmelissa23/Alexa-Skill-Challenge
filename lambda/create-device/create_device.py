@@ -2,6 +2,9 @@ import sys
 import logging
 import rds_config
 import pymysql
+import constants
+import random
+import string
 from passlib.hash import pbkdf2_sha256
 
 #rds settings
@@ -21,23 +24,27 @@ def handler(event, context):
     user_password = event['password']
     device_alias = event['alias']
 
+
     result = 0
 
     success = False
+    
+    token = ""
 
     with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))    
+        cursor.execute("SELECT * FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))
         result = cursor.fetchall()
-        if len(result == 1):
-            success = pbkdf2_sha256.verify(password, result[0]["pwd_key"])
+        if len(result) == 1:
+            print("User found")
+            success = pbkdf2_sha256.verify(user_password, result[0][constants.PWD_KEY_INDEX])
             if success:
-                user_id = result[0]['id']
-                token = str(user_id) + random.choices(string.ascii_letters + string.digits, k = 501)
-                cursor.execute("INSERT INTO `client_devices`(`user_id`, `device_token`, `alias`)" +
+                user_id = result[0][constants.ID_INDEX]
+                token = str(user_id) + "".join(random.choices(string.ascii_letters + string.digits, k = 501))
+                print(token)
+                cursor.execute("INSERT INTO `client_device`(`user_id`, `device_token`, `alias`)" +
                                " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(user_id, token, device_alias))
-                return token
     
         conn.commit()
         conn.close()
-        return("")
+        return(token)
         

@@ -13,9 +13,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=30, port=3306)
-#except:
-#    logger.error("ERROR: Unexpected error: Could not connect to MySql instance.")
-#    sys.exit()
 
 logger.info("SUCCESS: Connection to RDS mysql instance succeeded")
 def handler(event, context):

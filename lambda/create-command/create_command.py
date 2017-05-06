@@ -20,10 +20,12 @@ def handler(event, context):
 
     conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=30, port=3306)
 
-    user_name = event['username']
-    user_password = event['password']
-    device_alias = event['alias']
+    alexa_token = event['token']
+    if alexa_token == 0 or alexa_token == "":
+        return False
 
+    device_alias = event['alias']
+    
 
     result = 0
 
@@ -39,6 +41,7 @@ def handler(event, context):
             if success:
                 user_id = result[0][constants.ID_INDEX]
                 token = str(user_id) + "".join(random.choices(string.ascii_letters + string.digits, k = 501))
+                print(token)
                 cursor.execute("INSERT INTO `client_device`(`user_id`, `device_token`, `alias`)" +
                                " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(user_id, token, device_alias))
     

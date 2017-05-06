@@ -24,8 +24,11 @@ def handler(event, context):
     if alexa_token == 0 or alexa_token == "":
         return False
 
-    device_alias = event['alias']
-    
+    device_alias = event['device']
+    repo_alias = event['repository']
+
+    command_id = event['command']
+    command_extra = event['extra']
 
     result = 0
 
@@ -34,18 +37,21 @@ def handler(event, context):
     token = ""
 
     with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))
+        cursor.execute("SELECT * FROM `client_account` WHERE `alexa_token` = \"{0}\";".format(alexa_token))
         result = cursor.fetchall()
         if len(result) == 1:
-            success = pbkdf2_sha256.verify(user_password, result[0][constants.PWD_KEY_INDEX])
-            if success:
-                user_id = result[0][constants.ID_INDEX]
-                token = str(user_id) + "".join(random.choices(string.ascii_letters + string.digits, k = 501))
-                print(token)
-                cursor.execute("INSERT INTO `client_device`(`user_id`, `device_token`, `alias`)" +
-                               " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(user_id, token, device_alias))
+            user_id = result[0][constants.ID_INDEX]
+            cursor.execute("SELECT * FROM `client_device` WHERE `user_id` = \"{0}\" AND `alias` = \"{1}\" ;".format(user_id, device_alias))
+            result = cursor.fetchall()
+            if len(result) == 1:
+                device_id = result[0][constants.ID_INDEX]
+                cursor.execute("SELECT * FROM `client_device` WHERE `device_id` = \"{0}\" AND `alias` = \"{1}\" ;".format(device_id, repo_alias))
+                if len(result) == 1:
+                    repo_id = result[0][constants.ID_INDEX]
+                    cursor.execute("INSERT INTO `device_command`(`device_id`, `repo_id`, `command_id`, `command_extra`)" +
+                                   " VALUES(\"{0}\", \"{1}\", \"{2}\", \"{3}\");".format(device_id, repo_id, command_id, command_extra))
     
         conn.commit()
         conn.close()
-        return(token)
+        return(success)
         

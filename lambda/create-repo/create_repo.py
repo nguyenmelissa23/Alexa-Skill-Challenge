@@ -26,9 +26,8 @@ def handler(event, context):
     repo_alias = event['alias']
 
     result = 0
-
-    success = False
     
+    success = False
 
     with conn.cursor() as cursor:
         cursor.execute("SELECT * FROM `client_device` WHERE `token` = \"{0}\";".format(alexa_token))
@@ -37,7 +36,8 @@ def handler(event, context):
             device_id = result[0][constants.ID_INDEX]
             cursor.execute("INSERT INTO `client_device`(`device_id`, `alias`, `path`)" +
                            " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(device_id, repo_alias, repo_path))
-    
+            success = True
+
         conn.commit()
         conn.close()
         return success

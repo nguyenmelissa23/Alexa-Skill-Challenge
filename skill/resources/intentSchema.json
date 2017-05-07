@@ -1,64 +1,99 @@
 {
-    "intents":[
+  "intents": [
         {
-            "name": "AMAZON.CancelIntent",
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+        },
+        {
+        "name": "AMAZON.HelpIntent",
+        "samples": [
+            "how do I search"
+        ]
+        },
+        {
+        "name": "AMAZON.NoIntent",
+        "samples": []
+        },
+        {
+        "name": "AMAZON.RepeatIntent",
+        "samples": [
+            "repeat that",
+            "say that again",
+            "can you say that again",
+            "please repeat"
+        ]
+        },
+        {
+        "name": "AMAZON.StartOverIntent",
+        "samples": [
+            "startover",
+            "new search",
+            "search again"
+        ]
+        },
+        {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+        },
+        {
+        "name": "AMAZON.YesIntent",
+        "samples": []
+        },
+        {
+        "name": "GitCommandIntent",
+        "samples": [
+            "git {command}",
+            "git {command} {repo}",
+            "{command} {repo} ",
+            "{command} "
+        ],
+        "slots": [
+            {
+            "name": "repo",
+            "type": "LITERAL",
             "samples": []
-        },
-        {
-            "name": "AMAZON.HelpIntent",
-            "samples": [
-                "how do I search"
-            ]
-        },
-        {
-            "name": "AMAZON.NoIntent",
+            },
+            {
+            "name": "command",
+            "type": "LIST_OF_COMMANDS",
             "samples": []
+            }
+        ]
+        }
+    ],
+    "types": [
+        {
+        "name": "LIST_OF_COMMANDS",
+        "values": [
+            {
+            "name": {
+                "value": "push"
+            }
+            },
+            {
+            "name": {
+                "value": "pull"
+            }
+            },
+            {
+            "name": {
+                "value": "watch"
+            }
+            }
+        ]
         },
         {
-            "name": "AMAZON.RepeatIntent",
-            "samples": [
-                "repeat that",
-                "say that again",
-                "can you say that again",
-                "please repeat"
-            ]
-        },
+        "name": "LIST_OF_REPOS",
+        "values": []
+        }, 
         {
-            "name": "AMAZON.StartOverIntent",
-            "samples": [
-                "startover",
-                "new search",
-                "search again"
-            ]
-        },
-        {
-            "name": "AMAZON.StopIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.YesIntent",
-            "samples": []
-        },{
-            "name": "GitCommandIntent",
+            "name": "GitRepoList",
             "samples":[
-                "git {command}",
-                "git {command} {repo}" 
-            ], 
-            "slots":[
-                {
-                    "name": "command",
-                    "type": "LIST_OF_COMMAND", 
-                    "samples":[
-                        "pull",
-                        "push", 
-                        "watch" 
-                    ]
-                },{
-                    "name": "repo", 
-                    "type": "LIST_OF_REPO", 
-                    "samples": []
-                } 
+                "list my repository",
+                "list my repo", 
+                "what are my repository", 
+                "what are my repo" 
             ]
         }
     ]
-}
+}   

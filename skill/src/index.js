@@ -15,19 +15,28 @@ const app = {
 
 var states = {
     // REGISTERMODE: "_REGISTERMODE", 
-    // DESCRIPTION: "_DESCRIPTION", 
+    REPOMODE: "_REPOMODE", 
     COMMANDMODE: "_COMMANDMODE"
 };
 
+//=============Handlers=======================
 const newSessionHandlers = {
     "LaunchRequest": function(){
         this.handler.state = states.COMMANDMODE;
+        checkAlexaToken.call(this);
         this.emit(":ask", app.WELCOME_MESSAGE);
     }, 
+
     "GitHubVoiceIntent": function(){
         console.log("GitHub Voice Intent");
         this.handler.state = states.COMMANDMODE;
         this.emitWithState("GitHubVoiceIntent");
+    },
+
+    "GitRepoListIntent": function(){
+        console.log("Git Repo List Intent");
+        this.handler.state = states.REPOMODE;
+        this.emitWithState("GitRepoListIntent");
     },
 
     "AMAZON.RepeatIntent": function(){
@@ -50,6 +59,7 @@ const newSessionHandlers = {
 
 var gitCommandHandlers = Alexa.CreateStateHandler(states.COMMANDMODE,{
     "GitCommandIntent": function(){
+        checkAlexaToken.call(this);
         gitCommandIntentHandler.call(this);
     },
     "AMAZON.RepeatIntent": function(){
@@ -70,12 +80,73 @@ var gitCommandHandlers = Alexa.CreateStateHandler(states.COMMANDMODE,{
     }
 });
 
+var gitRepoHandlers = Alexa.CreateStateHandler(states.REPOMODE,{
+    "GitRepoListIntent": function(){
+        checkAlexaToken.call(this);
+        gitRepoList.call(this);
+    },
+    "AMAZON.RepeatIntent": function(){
+        this.emit(":ask", app.DESCRIPTION_STATE_HELP_MESSAGE);
+    },
+    "AMAZON.StopIntent": function(){
+        this.emit(":ask", app.SHUTDOWN_MESSAGE);
+    },
+    "AMAZON.CancelIntent": function(){
+        this.emit(":ask", app.EXIT_SKILL_MESSAGE );
+    },
+    "SessionEndedRequest": function(){
+        this.emit("AMAZON.StopIntent");
+    }, 
+    "Unhandled": function(){
+        console.log("Unhandled intent in gitCommandHandlers");
+        this.emit(":ask",app.DESCRIPTION_STATE_HELP_MESSAGE);
+    }
+});
+
+//FUNCTIONS
+
+function gitRepoList(){
+    var queryURL =  "https://rmkw7wi6z9.execute-api.us-west-1.amazonaws.com/Production/repositories/get";
+    var alexaToken;
+    if (this.event.session.user.accessToken){
+        alexaToken = this.event.session.user.accessToken;
+        this.emit(":tell", "Alexa token is available");
+    } else {
+        this.emit(":tell", "Unable to get Alexa token");
+    }
+     
+    console.log(alexaToken);
+
+    var request = $.post(queryURL, JSON.stringify(alexaToken));
+
+    request.done(function(data){
+        console.log("request.done");
+        console.log(data);
+
+        this.emit(":tell", "Here are your repositories");
+    });
+
+    request.fail(function(data){
+        console.log("request.fail");
+        console.log(data);
+        
+        
+    });
+}
+
+function checkAlexaToken(){
+    if (this.event.session.user.accessToken == undefined){
+        this.emit(":tellwithLinkAccountCard", "To start using this app, please use the Alexa app to authenticate on Amazon");
+    } 
+    return;
+}
 
 function gitCommandIntentHandler(){
     if (this.event.request.intent.slots.command.value){
         var gitCommand = this.event.request.intent.slots.command.value;
-        console.log("gitCommand", gitCommand);
-        this.emit(":tell", "You said " + gitCommand);
+        var gitRepo = this.event.request.intent.slots.repo.value;
+        console.log("gitCommand", gitCommand, gitRepo);
+        this.emit(":tell", "You said git" + gitCommand + gitRepo);
     } else 
         this.emit(":tell", "No command was found");
 }
@@ -83,6 +154,6 @@ function gitCommandIntentHandler(){
 exports.handler = function(event, context, callback){
     var alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
-    alexa.registerHandlers(newSessionHandlers, gitCommandHandlers);
+    alexa.registerHandlers(newSessionHandlers, gitCommandHandlers,gitRepoHandlers );
     alexa.execute();
 };

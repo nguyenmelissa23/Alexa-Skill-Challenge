@@ -80,7 +80,7 @@ $("#submitLogin").on("click", function(event){
     request.done(function(data){
         console.log("request.done");
         console.log(data);
-        var redirectQueryString = urlObject.redirect_uri + "?";
+        var redirectQueryString = urlObject.redirect_uri + "#";
             redirectQueryString += "state=" + urlObject.state;
             redirectQueryString += "&access_token=" + data.token;
             redirectQueryString += "&token_type=bearer";

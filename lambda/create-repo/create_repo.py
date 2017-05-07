@@ -21,7 +21,6 @@ def handler(event, context):
 
     device_token = event['token']
     
-    repo_path = event['path']
     repo_alias = event['alias']
 
     result = 0
@@ -33,11 +32,11 @@ def handler(event, context):
         result = cursor.fetchall()
         if len(result) == 1:
             device_id = result[0][constants.ID_INDEX]
-            cursor.execute("INSERT INTO `user_repository`(`device_id`, `alias`, `path`)" +
-                           " VALUES(\"{0}\", \"{1}\", \"{2}\");".format(device_id, repo_alias, repo_path))
+            cursor.execute("INSERT INTO `user_repository`(`device_id`, `alias`)" +
+                           " VALUES(\"{0}\", \"{1}\");".format(device_id, repo_alias))
             success = True
 
         conn.commit()
         conn.close()
-        return success
+        return({ "success": success })
         

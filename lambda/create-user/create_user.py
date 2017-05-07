@@ -31,7 +31,7 @@ def handler(event, context):
         cursor.execute("SELECT COUNT(*) FROM `client_account` WHERE `username` = \"{0}\";".format(user_name))    
         result = cursor.fetchall()
         if result[0][0] == 0:
-            sucess = True
+            success = True
             cursor.execute("INSERT INTO `client_account`(`username`, `pwd_key`)" +
                                " VALUES(\"{0}\", \"{1}\");".format(user_name, hashed_password))
         else:
@@ -39,5 +39,5 @@ def handler(event, context):
     
         conn.commit()
         conn.close()
-        return(success)
+        return({ "success": success })
         

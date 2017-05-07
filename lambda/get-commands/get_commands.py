@@ -29,7 +29,7 @@ def handler(event, context):
         result = cursor.fetchall()
         if len(result) == 1:
             device_id = result[0][constants.ID_INDEX]
-            cursor.execute("SELECT `device_command`.`command_id`, `device_command`.`command_extra`, `user_repository`.`path`" +
+            cursor.execute("SELECT `device_command`.`command_id`, `device_command`.`command_extra`, `user_repository`.`alias`" +
                            " FROM `device_command`" +
                            " INNER JOIN `user_repository` ON `device_command`.`repo_id` = `user_repository`.`id`" +
                            " WHERE `device_command`.`device_id` = \"{0}\";".format(device_id))
@@ -39,7 +39,7 @@ def handler(event, context):
                 commandlist.append({
                     'command_id' : command[constants.COMMAND_ID_INDEX],
                     'command_extra' : command[constants.COMMAND_EXTRA_INDEX],
-                    'path' : command[constants.COMMAND_PATH_INDEX]
+                    'alias' : command[constants.REPO_ALIAS_INDEX]
                 })
             cursor.execute("DELETE FROM `device_command` WHERE `device_id` = {0};".format(device_id))
             

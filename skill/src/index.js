@@ -22,21 +22,22 @@ var states = {
 //=============Handlers=======================
 const newSessionHandlers = {
     "LaunchRequest": function(){
-        this.handler.state = states.COMMANDMODE;
         checkAlexaToken.call(this);
         this.emit(":ask", app.WELCOME_MESSAGE);
+        this.handler.state = states.REPOMODE;
     }, 
-
-    "GitHubVoiceIntent": function(){
-        console.log("GitHub Voice Intent");
-        this.handler.state = states.COMMANDMODE;
-        this.emitWithState("GitHubVoiceIntent");
-    },
 
     "GitRepoListIntent": function(){
         console.log("Git Repo List Intent");
         this.handler.state = states.REPOMODE;
         this.emitWithState("GitRepoListIntent");
+        // this.handler.state = states.COMMANDMODE;
+    },
+
+    "GitCommandIntent": function(){
+        console.log("GitHub Voice Intent");
+        this.handler.state = states.COMMANDMODE;
+        this.emitWithState("GitCommandIntent");
     },
 
     "AMAZON.RepeatIntent": function(){
@@ -52,8 +53,8 @@ const newSessionHandlers = {
         this.emit("AMAZON.StopIntent");
     }, 
     "Unhandled": function(){
-        this.handler.state = states.COMMANDMODE;
-        this.emitWithState("GitCommandIntent");
+        this.handler.state = states.REPOMODE;
+        this.emitWithState("GitRepoListIntent");
     }
 };
 
@@ -154,6 +155,6 @@ function gitCommandIntentHandler(){
 exports.handler = function(event, context, callback){
     var alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
-    alexa.registerHandlers(newSessionHandlers, gitCommandHandlers,gitRepoHandlers );
+    alexa.registerHandlers(newSessionHandlers,gitRepoHandlers, gitCommandHandlers);
     alexa.execute();
 };

@@ -27,7 +27,6 @@ def handler(event, context):
                        " `id` INT(11) auto_increment NOT NULL,"
                        " `device_id` INT(11) NOT NULL,"
                        " `alias` VARCHAR(256) NOT NULL,"
-                       " `path` VARCHAR(512) NOT NULL,"
                        " PRIMARY KEY (`id`),"
                        " FOREIGN KEY (`device_id`) REFERENCES `client_device` (`id`));" )
         conn.commit()

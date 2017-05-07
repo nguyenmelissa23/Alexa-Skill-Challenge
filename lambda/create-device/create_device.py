@@ -44,5 +44,5 @@ def handler(event, context):
     
         conn.commit()
         conn.close()
-        return(token)
+        return({ "token" : token })
         

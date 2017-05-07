@@ -23,16 +23,14 @@ def handler(event, context):
     This function fetches content from mysql RDS instance
     """
 
-    item_count = 0
-
     with conn.cursor() as cur:        
         cur.execute("CREATE TABLE `client_device`("
                        " `id` INT(11) auto_increment NOT NULL,"
                        " `user_id` INT(11) NOT NULL,"
                        " `device_token` VARCHAR(512) NOT NULL,"
-                       " `alias` VARCHAR(256) NOT NULL, "
+                       " `alias` VARCHAR(256) NOT NULL,"
                        " PRIMARY KEY (`id`),"
-                       " FOREIGN KEY (`user_id`) REFERENCES `client_account` (`id`)) ON DELETE RESTRICT;" )
+                       " FOREIGN KEY (`user_id`) REFERENCES `client_account` (`id`) ON DELETE RESTRICT);" )
         conn.commit()
         conn.close()
         return "Created table"

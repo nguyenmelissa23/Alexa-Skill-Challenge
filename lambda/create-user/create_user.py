@@ -20,6 +20,7 @@ def handler(event, context):
     user_name = event['username']
     user_password = event['password']
     hashed_password = pbkdf2_sha256.hash(user_password)
+    token = ""
     
     result = 0
 
